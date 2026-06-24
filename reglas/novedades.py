@@ -150,12 +150,12 @@ REGLAS = [
                        p.numero_predial_nacional
                 FROM cca_estructuranovedadnumeropredial nv
                 JOIN cca_predio p ON p.T_Id = nv.cca_predio_novedad_numero_predial
-                WHERE nv.tipo_novedad IN ('3', '6', '7')
+                WHERE nv.tipo_novedad IN ('3', '7')
             ),
             por_predio AS (
                 SELECT predio_tid, numero_predial_nacional,
                        SUM(CASE WHEN numero_predial = numero_predial_nacional
-                                     AND tipo_novedad IN ('6','7')
+                                     AND tipo_novedad IN ('7')
                                 THEN 1 ELSE 0 END) AS n_cancel_mismo,
                        SUM(CASE WHEN tipo_novedad = '3' THEN 1 ELSE 0 END) AS n_div_mat,
                        COUNT(*) AS n_total
@@ -169,7 +169,7 @@ REGLAS = [
                    '1 cancelación con mismo NP + resto desenglobe div. material'
             FROM por_predio
             WHERE n_cancel_mismo <> 1
-               OR n_div_mat < 1
+               and n_div_mat < 1
         """,
     },
     # ==================================================================
@@ -618,13 +618,13 @@ REGLAS = [
         "severidad": "error",
         "sql": """
             SELECT 'cca_estructuranovedadnumeropredial', MIN(nv.T_Id),
-                   nv.numero_predial,
+                   nv.cca_predio_novedad_numero_predial,
                    'NP con novedad duplicada (mismo tipo_novedad y NP)',
                    printf('tipo=%s repeticiones=%d',
                           nv.tipo_novedad, COUNT(*)),
                    'combinación NP + tipo_novedad única'
             FROM cca_estructuranovedadnumeropredial nv
-            GROUP BY nv.numero_predial, nv.tipo_novedad
+            GROUP BY nv.cca_predio_novedad_numero_predial, nv.tipo_novedad
             HAVING COUNT(*) > 1
         """,
     },
