@@ -26,7 +26,7 @@ Para el chequeo de "novedad de cancelación" consideramos tipo_novedad >= 6
 
 # Condiciones que exigen UN cca_terreno y exactamente uno.
 # (excluimos PH.Unidad_Predial=2 porque no tiene terreno propio).
-CONDICIONES_CON_TERRENO = "('0','1','3','4','6','8','10')"
+CONDICIONES_CON_TERRENO = "('0','1','3','4','6','8','9','10')"
 
 
 REGLAS = [
